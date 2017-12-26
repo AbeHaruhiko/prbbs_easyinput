@@ -3,7 +3,7 @@
 const client = require('cheerio-httpcli');
 let inouttime = {};
 
-async function easyInput(user, pass, mode, time) {
+const easyInput = async (user, pass, mode, time) => {
 
   // ログイン
   await client.fetch('https://s2soft.co.jp/prbbs/login', { userId: user, userPass: pass });
