@@ -3,10 +3,10 @@
 const client = require('cheerio-httpcli');
 let inouttime = {};
 
-function easyInput(user, pass, mode) {
+function easyInput(user, pass, mode, time) {
 
   // ログイン
-  client.fetch('https://s2soft.co.jp/prbbs/login', { userId: user, userPass: pass })
+  return client.fetch('https://s2soft.co.jp/prbbs/login', { userId: user, userPass: pass })
     .then((result) => {
       // token取得のため、一度アクセスする
       return client.fetch('https://s2soft.co.jp/prbbs/easyinput');
@@ -14,7 +14,8 @@ function easyInput(user, pass, mode) {
     .then((result) => {
       // 簡易入力
       const inputInfo = {
-        'mode': mode
+        'mode': mode,
+        'intime': time ? time : '自動'
       };
       return result.$('form[name=timeCard]').attr('method', 'POST').submit(inputInfo);
     })
@@ -24,7 +25,7 @@ function easyInput(user, pass, mode) {
       const outtime = result.$('dt:contains("終了時間")').next('dd').text();
       inouttime.intime = intime;
       inouttime.outtime = outtime;
-      console.log(inouttime);
+      // console.log(inouttime);
       return inouttime;
     })
     .catch(function (err) {
